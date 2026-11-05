@@ -92,7 +92,7 @@ Save the Python code in a file named `ticket_booking.py`.
 Run the program:
 
 ```bash
-python ticket_booking.py
+python Semaphore.py
 ```
 
 No external libraries are required. All modules used in this project are included in Python's standard library.
