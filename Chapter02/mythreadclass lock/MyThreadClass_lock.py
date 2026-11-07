@@ -7,68 +7,50 @@ from random import randint
 # Lock Definition
 threadLock = threading.Lock()
 
-class MyThreadClass (Thread):
-   def __init__(self, name, duration):
-      Thread.__init__(self)
-      self.name = name
-      self.duration = duration
-   def run(self):
-      #Acquire the Lock
-      threadLock.acquire()      
-      print ("---> " + self.name + \
-             " running, belonging to process ID "\
-             + str(os.getpid()) + "\n")
-      time.sleep(self.duration)
-      print ("---> " + self.name + " over\n")
-      #Release the Lock
-      threadLock.release()
+class StudentThread(Thread):
+    def __init__(self, name, duration):
+        Thread.__init__(self)
+        self.name = name
+        self.duration = duration
+
+    def run(self):
+        # Acquire lock before using the computer
+        threadLock.acquire()
+
+        print("---> " + self.name +
+              " started using the computer. Process ID: "
+              + str(os.getpid()) + "\n")
+
+        # Simulate working on the computer
+        time.sleep(self.duration)
+
+        print("---> " + self.name + " finished using the computer\n")
+
+        # Release lock after finishing
+        threadLock.release()
 
 
 def main():
     start_time = time.time()
-    # Thread Creation
-    thread1 = MyThreadClass("Thread#1 ", randint(1,10))
-    thread2 = MyThreadClass("Thread#2 ", randint(1,10))
-    thread3 = MyThreadClass("Thread#3 ", randint(1,10))
-    thread4 = MyThreadClass("Thread#4 ", randint(1,10))
-    thread5 = MyThreadClass("Thread#5 ", randint(1,10))
-    thread6 = MyThreadClass("Thread#6 ", randint(1,10))
-    thread7 = MyThreadClass("Thread#7 ", randint(1,10))
-    thread8 = MyThreadClass("Thread#8 ", randint(1,10))
-    thread9 = MyThreadClass("Thread#9 ", randint(1,10))
 
-    # Thread Running
-    thread1.start()
-    thread2.start()
-    thread3.start()
-    thread4.start()
-    thread5.start()
-    thread6.start()
-    thread7.start()
-    thread8.start()
-    thread9.start()
+    # Create 9 student threads
+    threads = []
 
-    # Thread joining
-    thread1.join()
-    thread2.join()
-    thread3.join()
-    thread4.join()
-    thread5.join()
-    thread6.join()
-    thread7.join()
-    thread8.join()
-    thread9.join()
+    for i in range(1, 10):
+        t = StudentThread("Student#" + str(i), randint(1, 5))
+        threads.append(t)
 
-    # End 
-    print("End")
+    # Start all threads
+    for t in threads:
+        t.start()
 
-    #Execution Time
+    # Wait for all threads
+    for t in threads:
+        t.join()
+
+    print("All students have finished.")
     print("--- %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == "__main__":
     main()
-
-    
-
-
